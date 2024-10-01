@@ -61,10 +61,10 @@ async function showMenu() {
   while (!validChoice) {
     // Display our menu to the player.
     clearScreen();
-    print(ANSI.COLOR.YELLOW + "MENU" + ANSI.RESET);
+    print(ANSI.COLOR.YELLOW + language.MENU + ANSI.RESET);
     print(language.PLAY_GAME);
-    print("2. Settings");
-    print("3. Exit Game");
+    print(language.SETTINGS);
+    print(language.EXIT_GAME);
 
     // Wait for the choice.
     choice = await askQuestion("");
@@ -85,17 +85,19 @@ async function showMenu() {
 }
 
 async function settings() {
-  console.log("1 swap language");
-  console.log("2 swap mode");
+  console.log(language.SWAP_LANGUAGE);
+  console.log(language.SWAP_MODE);
   let answer = await askQuestion("");
+  let swapLanguage = 1;
+  let swapMode = 2;
 
-  if (answer == "1") {
+  if (answer == swapLanguage) {
     language = language == DICTIONARY.en ? DICTIONARY.no : DICTIONARY.en;
   }
-  if (answer == "2") {
+  if (answer == swapMode) {
     pve = pve == false ? true : false;
   }
-  if (answer != "1" && answer != "2") {
+  if (answer != swapLanguage && answer != swapMode) {
     showMenu();
   }
 }
@@ -130,13 +132,13 @@ async function askWantToPlayAgain() {
 function showGameSummary(outcome) {
   clearScreen();
   if (outcome == -10) {
-    print("tie");
+    print(language.TIE);
   } else {
     let winningPlayer = outcome > 0 ? 1 : 2;
-    print("Winner is player " + winningPlayer);
+    print(language.WINNER + winningPlayer);
   }
   showGameBoardWithCurrentState();
-  print("GAME OVER");
+  print(language.GAME_OVER);
 }
 
 function changeCurrentPlayer() {
@@ -144,6 +146,9 @@ function changeCurrentPlayer() {
 }
 
 function evaluateGameState() {
+  const WIN_REQUIREMENT = 3;
+  const TIE_REQUIREMENT = -10;
+  const EMPTY_POSITION = 0;
   let sum = 0;
   let state = 0;
 
@@ -152,7 +157,7 @@ function evaluateGameState() {
       sum += gameboard[row][col];
     }
 
-    if (Math.abs(sum) == 3) {
+    if (Math.abs(sum) == WIN_REQUIREMENT) {
       state = sum;
     }
     sum = 0;
@@ -163,7 +168,7 @@ function evaluateGameState() {
       sum += gameboard[row][col];
     }
 
-    if (Math.abs(sum) == 3) {
+    if (Math.abs(sum) == WIN_REQUIREMENT) {
       state = sum;
     }
 
@@ -174,7 +179,7 @@ function evaluateGameState() {
     sum += gameboard[diag][diag];
   }
 
-  if (Math.abs(sum) == 3) {
+  if (Math.abs(sum) == WIN_REQUIREMENT) {
     state = sum;
   }
   sum = 0;
@@ -183,23 +188,23 @@ function evaluateGameState() {
     sum += gameboard[diag][2 - diag];
   }
 
-  if (Math.abs(sum) == 3) {
+  if (Math.abs(sum) == WIN_REQUIREMENT) {
     state = sum;
   }
   sum = 0;
 
-  let winner = state / 3;
+  let winner = state / WIN_REQUIREMENT;
 
   let tie = true;
   for (let col = 0; col < GAME_BOARD_SIZE; col++) {
     for (let row = 0; row < GAME_BOARD_SIZE; row++) {
-      if (gameboard[col][row] == 0) {
+      if (gameboard[col][row] == EMPTY_POSITION) {
         tie = false;
       }
     }
   }
   if (tie) {
-    return -10;
+    return TIE_REQUIREMENT;
   }
 
   return winner;
@@ -212,12 +217,12 @@ function updateGameBoardState(move) {
 }
 
 async function getGameMoveFromCurrentPlayer() {
-  if (currentPlayer == -1 && pve) {
+  if (currentPlayer == PLAYER_2 && pve) {
     return generateBotMove();
   }
   let positions = null;
   do {
-    let rawInput = await askQuestion("Place your mark at: ");
+    let rawInput = await askQuestion(language.PLACE_YOUR_MARK);
     positions = rawInput.split(" ");
     positions[0] = positions[0] - 1;
     positions[1] = positions[1] - 1;
@@ -240,22 +245,18 @@ function generateBotMove() {
 
 function isValidPositionOnBoard(position) {
   if (position.length < 2) {
-    // We were not given two numbers or more.
     return false;
   }
 
   let isValidInput = true;
   if (position[0] * 1 != position[0] && position[1] * 1 != position[1]) {
-    // Not Numbers
     inputWasCorrect = false;
   } else if (position[0] > GAME_BOARD_SIZE && position[1] > GAME_BOARD_SIZE) {
-    // Not on board
     inputWasCorrect = false;
   } else if (
     Number.parseInt(position[0]) != position[0] &&
     Number.parseInt(position[1]) != position[1]
   ) {
-    // Position taken.
     inputWasCorrect = false;
   }
 
@@ -263,11 +264,11 @@ function isValidPositionOnBoard(position) {
 }
 
 function showHUD() {
-  let playerDescription = "one";
+  let playerDescription = language.PLAYER_ONE_DESCRIPTION;
   if (PLAYER_2 == currentPlayer) {
-    playerDescription = "two";
+    playerDescription = language.PLAYER_TWO_DESCRIPTION;
   }
-  print("\x1b[33m Player " + playerDescription + " it is your turn");
+  print("\x1b[33m Player " + playerDescription + language.YOUR_TURN);
 }
 
 function showGameBoardWithCurrentState() {
