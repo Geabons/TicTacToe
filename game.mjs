@@ -20,10 +20,11 @@ const NO_CHOICE = -1;
 let language = DICTIONARY.en;
 let gameboard;
 let currentPlayer;
+let pve = false;
 
 clearScreen();
 showSplashScreen();
-setTimeout(start, 2500); // This waites 2.5seconds before calling the function. i.e. we get to see the splash screen for 2.5 seconds before the menu takes over.
+setTimeout(start, 2500); // This waits 2.5seconds before calling the function. i.e. we get to see the splash screen for 2.5 seconds before the menu takes over.
 
 //#region game functions -----------------------------
 
@@ -83,6 +84,20 @@ async function showMenu() {
   return choice;
 }
 
+async function settings() {
+  console.log("1 swap language")
+  console.log("2 swap mode")
+  let answer = await askQuestion("");
+  
+  if (answer == "1"){
+    language = language == DICTIONARY.en?DICTIONARY.no:DICTIONARY.en;
+  } if (answer == "2"){
+    pve = pve == false?true:false;
+  } if (answer != "1" && answer != "2"){
+    showMenu();
+  }
+}
+
 async function playGame() {
   // Play game..
   let outcome;
@@ -112,8 +127,12 @@ async function askWantToPlayAgain() {
 
 function showGameSummary(outcome) {
   clearScreen();
-  let winningPlayer = outcome > 0 ? 1 : 2;
-  print("Winner is player " + winningPlayer);
+  if (outcome == -10){
+    print("tie");
+  }else{
+    let winningPlayer = outcome > 0 ? 1 : 2;
+    print("Winner is player " + winningPlayer);
+  }
   showGameBoardWithCurrentState();
   print("GAME OVER");
 }
@@ -149,7 +168,38 @@ function evaluateGameState() {
     sum = 0;
   }
 
+  for (let diag = 0; diag < GAME_BOARD_SIZE; diag++) {
+    sum += gameboard[diag][diag];
+  }
+
+  if (Math.abs(sum) == 3) {
+    state = sum;
+  }
+  sum = 0;
+
+  for (let diag = 0; diag < GAME_BOARD_SIZE; diag++) {
+    sum += gameboard[diag][2 - diag];
+  }
+
+  if (Math.abs(sum) == 3) {
+    state = sum;
+  }
+  sum = 0;
+
   let winner = state / 3;
+
+  let tie = true;
+  for (let col = 0; col < GAME_BOARD_SIZE; col++) {
+    for (let row = 0; row < GAME_BOARD_SIZE; row++) {
+      if (gameboard[col][row] == 0){
+        tie = false;
+      }
+    }
+  }
+  if (tie){
+    return -10;
+  }
+
   return winner;
 }
 
@@ -168,6 +218,8 @@ async function getGameMoveFromCurrentPlayer() {
 
   return position;
 }
+
+
 
 function isValidPositionOnBoard(position) {
   if (position.length < 2) {
@@ -241,6 +293,7 @@ function createGameBoard() {
 
   return newBoard;
 }
+
 
 function clearScreen() {
   console.log(ANSI.CLEAR_SCREEN, ANSI.CURSOR_HOME, ANSI.RESET);
