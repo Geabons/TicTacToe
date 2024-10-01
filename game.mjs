@@ -62,7 +62,7 @@ async function showMenu() {
     // Display our menu to the player.
     clearScreen();
     print(ANSI.COLOR.YELLOW + "MENU" + ANSI.RESET);
-    print("1. Play Game");
+    print(language.PLAY_GAME);
     print("2. Settings");
     print("3. Exit Game");
 
@@ -215,13 +215,14 @@ async function getGameMoveFromCurrentPlayer() {
   if (currentPlayer == -1 && pve) {
     return generateBotMove();
   }
-  let position = null;
+  let positions = null;
   do {
     let rawInput = await askQuestion("Place your mark at: ");
-    position = rawInput.split(" ");
-  } while (isValidPositionOnBoard(position) == false);
-
-  return position;
+    positions = rawInput.split(" ");
+    positions[0] = positions[0] - 1;
+    positions[1] = positions[1] - 1;
+  } while (isValidPositionOnBoard(positions) == false);
+  return positions;
 }
 
 function generateBotMove() {
@@ -266,7 +267,7 @@ function showHUD() {
   if (PLAYER_2 == currentPlayer) {
     playerDescription = "two";
   }
-  print("Player " + playerDescription + " it is your turn");
+  print("\x1b[33m Player " + playerDescription + " it is your turn");
 }
 
 function showGameBoardWithCurrentState() {
@@ -275,11 +276,11 @@ function showGameBoardWithCurrentState() {
     for (let currentCol = 0; currentCol < GAME_BOARD_SIZE; currentCol++) {
       let cell = gameboard[currentRow][currentCol];
       if (cell == 0) {
-        rowOutput += "_ ";
+        rowOutput += "\x1b[33m _ ";
       } else if (cell > 0) {
-        rowOutput += "X ";
+        rowOutput += "\x1b[32m X ";
       } else {
-        rowOutput += "O  ";
+        rowOutput += "\x1b[34m O ";
       }
     }
 
