@@ -36,7 +36,7 @@ async function start() {
     if (chosenAction == MENU_CHOICES.MENU_CHOICE_START_GAME) {
       await runGame();
     } else if (chosenAction == MENU_CHOICES.MENU_CHOICE_SHOW_SETTINGS) {
-      ///TODO: Needs implementing
+      await settings();
     } else if (chosenAction == MENU_CHOICES.MENU_CHOICE_EXIT_GAME) {
       clearScreen();
       process.exit();
@@ -85,15 +85,17 @@ async function showMenu() {
 }
 
 async function settings() {
-  console.log("1 swap language")
-  console.log("2 swap mode")
+  console.log("1 swap language");
+  console.log("2 swap mode");
   let answer = await askQuestion("");
-  
-  if (answer == "1"){
-    language = language == DICTIONARY.en?DICTIONARY.no:DICTIONARY.en;
-  } if (answer == "2"){
-    pve = pve == false?true:false;
-  } if (answer != "1" && answer != "2"){
+
+  if (answer == "1") {
+    language = language == DICTIONARY.en ? DICTIONARY.no : DICTIONARY.en;
+  }
+  if (answer == "2") {
+    pve = pve == false ? true : false;
+  }
+  if (answer != "1" && answer != "2") {
     showMenu();
   }
 }
@@ -127,9 +129,9 @@ async function askWantToPlayAgain() {
 
 function showGameSummary(outcome) {
   clearScreen();
-  if (outcome == -10){
+  if (outcome == -10) {
     print("tie");
-  }else{
+  } else {
     let winningPlayer = outcome > 0 ? 1 : 2;
     print("Winner is player " + winningPlayer);
   }
@@ -191,12 +193,12 @@ function evaluateGameState() {
   let tie = true;
   for (let col = 0; col < GAME_BOARD_SIZE; col++) {
     for (let row = 0; row < GAME_BOARD_SIZE; row++) {
-      if (gameboard[col][row] == 0){
+      if (gameboard[col][row] == 0) {
         tie = false;
       }
     }
   }
-  if (tie){
+  if (tie) {
     return -10;
   }
 
@@ -210,6 +212,9 @@ function updateGameBoardState(move) {
 }
 
 async function getGameMoveFromCurrentPlayer() {
+  if (currentPlayer == -1 && pve) {
+    return generateBotMove();
+  }
   let position = null;
   do {
     let rawInput = await askQuestion("Place your mark at: ");
@@ -219,11 +224,22 @@ async function getGameMoveFromCurrentPlayer() {
   return position;
 }
 
-
+function generateBotMove() {
+  let max = 2;
+  let column = 0;
+  let row = 0;
+  let generatedPosition = "";
+  do {
+    column = Math.floor(Math.random() * max);
+    row = Math.floor(Math.random() * max);
+    generatedPosition = (column + " " + row).split(" ");
+  } while (isValidPositionOnBoard(generatedPosition) == false);
+  return generatedPosition;
+}
 
 function isValidPositionOnBoard(position) {
   if (position.length < 2) {
-    // We where not given two numbers or more.
+    // We were not given two numbers or more.
     return false;
   }
 
@@ -293,7 +309,6 @@ function createGameBoard() {
 
   return newBoard;
 }
-
 
 function clearScreen() {
   console.log(ANSI.CLEAR_SCREEN, ANSI.CURSOR_HOME, ANSI.RESET);
