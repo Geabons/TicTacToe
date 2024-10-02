@@ -8,7 +8,6 @@ const GAME_BOARD_SIZE = 3;
 const PLAYER_1 = 1;
 const PLAYER_2 = -1;
 
-// These are the valid choices for the menu.
 const MENU_CHOICES = {
   MENU_CHOICE_START_GAME: 1,
   MENU_CHOICE_SHOW_SETTINGS: 2,
@@ -24,7 +23,7 @@ let pve = false;
 
 clearScreen();
 showSplashScreen();
-setTimeout(start, 2500); // This waits 2.5seconds before calling the function. i.e. we get to see the splash screen for 2.5 seconds before the menu takes over.
+setTimeout(start, 2500); 
 
 //#region game functions -----------------------------
 
@@ -48,28 +47,24 @@ async function runGame() {
   let isPlaying = true;
 
   while (isPlaying) {
-    // Do the following until the player dos not want to play anymore.
-    initializeGame(); // Reset everything related to playing the game
-    isPlaying = await playGame(); // run the actual game
+    initializeGame(); 
+    isPlaying = await playGame();
   }
 }
 
 async function showMenu() {
-  let choice = -1; // This variable tracks the choice the player has made. We set it to -1 initially because that is not a valid choice.
-  let validChoice = false; // This variable tells us if the choice the player has made is one of the valid choices. It is initially set to false because the player has made no choices.
+  let choice = -1; 
+  let validChoice = false; 
 
   while (!validChoice) {
-    // Display our menu to the player.
     clearScreen();
     print(ANSI.COLOR.YELLOW + language.MENU + ANSI.RESET);
     print(language.PLAY_GAME);
     print(language.SETTINGS);
     print(language.EXIT_GAME);
 
-    // Wait for the choice.
     choice = await askQuestion("");
 
-    // Check to see if the choice is valid.
     if (
       [
         MENU_CHOICES.MENU_CHOICE_START_GAME,
@@ -103,7 +98,7 @@ async function settings() {
 }
 
 async function playGame() {
-  // Play game..
+
   let outcome;
   do {
     clearScreen();
