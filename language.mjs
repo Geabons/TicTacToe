@@ -9,13 +9,14 @@ const DICTIONARY = {
         SWAP_MODE: "2 swap mode",
         PLACE_YOUR_MARK: "place your mark at: ",
         TIE: "Tie",
-        WINNER: "Winner is player ",
-        GAME_OVER: "Game Over",
+        WINNER: "\x1b[33m Winner is player ",
+        GAME_OVER: "\x1b[33m Game Over",
         PLAY_AGAIN_QUESTION: "Play again (YES/no)? ",
         CONFIRM: "y",
         PLAYER_ONE_DESCRIPTION: "one",
         PLAYER_TWO_DESCRIPTION: "two",
-        YOUR_TURN: " it is your turn"
+        YOUR_TURN: " it is your turn",
+        PLAYER: "\x1b[33m Player "
     },
     no: {
         MENU: "MENY",
@@ -26,13 +27,14 @@ const DICTIONARY = {
         SWAP_MODE: "2 endre modus",
         PLACE_YOUR_MARK: "plasser din brikke: ",
         TIE: "Uavgjort",
-        WINNER: "vinneren er spiller ",
-        GAME_OVER: "Spillet er over",
+        WINNER: "\x1b[33m vinneren er spiller ",
+        GAME_OVER: "\x1b[33m Spillet er over",
         PLAY_AGAIN_QUESTION: "Spill igjen (Ja/nei)? ",
         CONFIRM: "j",
         PLAYER_ONE_DESCRIPTION: "en",
         PLAYER_TWO_DESCRIPTION: "to",
-        YOUR_TURN: " det er din tur"
+        YOUR_TURN: " det er din tur",
+        PLAYER: "\x1b[33m spiller "
     }
 }
 

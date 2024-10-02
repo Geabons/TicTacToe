@@ -262,7 +262,7 @@ function showHUD() {
   if (PLAYER_2 == currentPlayer) {
     playerDescription = language.PLAYER_TWO_DESCRIPTION;
   }
-  print("\x1b[33m Player " + playerDescription + language.YOUR_TURN);
+  print(language.PLAYER + playerDescription + language.YOUR_TURN);
 }
 
 function showGameBoardWithCurrentState() {
