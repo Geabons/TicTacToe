@@ -23,7 +23,7 @@ let pve = false;
 
 clearScreen();
 showSplashScreen();
-setTimeout(start, 2500); 
+setTimeout(start, 2500);
 
 //#region game functions -----------------------------
 
@@ -47,14 +47,14 @@ async function runGame() {
   let isPlaying = true;
 
   while (isPlaying) {
-    initializeGame(); 
+    initializeGame();
     isPlaying = await playGame();
   }
 }
 
 async function showMenu() {
-  let choice = -1; 
-  let validChoice = false; 
+  let choice = -1;
+  let validChoice = false;
 
   while (!validChoice) {
     clearScreen();
@@ -80,8 +80,8 @@ async function showMenu() {
 }
 
 async function settings() {
-  console.log(language.SWAP_LANGUAGE);
-  console.log(language.SWAP_MODE);
+  print(language.SWAP_LANGUAGE);
+  print(language.SWAP_MODE);
   let answer = await askQuestion("");
   let swapLanguage = 1;
   let swapMode = 2;
@@ -98,7 +98,6 @@ async function settings() {
 }
 
 async function playGame() {
-
   let outcome;
   do {
     clearScreen();
@@ -272,7 +271,7 @@ function showGameBoardWithCurrentState() {
     for (let currentCol = 0; currentCol < GAME_BOARD_SIZE; currentCol++) {
       let cell = gameboard[currentRow][currentCol];
       if (cell == 0) {
-        rowOutput += "\x1b[33m _ ";
+        rowOutput += "\x1b[33m [] ";
       } else if (cell > 0) {
         rowOutput += "\x1b[32m X ";
       } else {
