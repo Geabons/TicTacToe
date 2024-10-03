@@ -226,7 +226,7 @@ async function getGameMoveFromCurrentPlayer() {
 }
 
 function generateBotMove() {
-  let max = 2;
+  let max = 3;
   let column = 0;
   let row = 0;
   let generatedPosition = "";
