@@ -93,7 +93,7 @@ async function settings() {
     pve = pve == false ? true : false;
   }
   if (answer != swapLanguage && answer != swapMode) {
-    showMenu();
+    await showMenu();
   }
 }
 
