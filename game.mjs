@@ -125,7 +125,8 @@ async function askWantToPlayAgain() {
 
 function showGameSummary(outcome) {
   clearScreen();
-  if (outcome == -10) {
+  const TIE_REQUIREMENT = -10;
+  if (outcome == TIE_REQUIREMENT) {
     print(language.TIE);
   } else {
     let winningPlayer = outcome > 0 ? 1 : 2;
