@@ -233,7 +233,7 @@ function generateBotMove() {
     column = Math.floor(Math.random() * max);
     row = Math.floor(Math.random() * max);
     generatedPosition = (column + " " + row).split(" ");
-  } while (isValidPositionOnBoard(generatedPosition) == false);
+  } while (!isValidPositionOnBoard(generatedPosition));
   return generatedPosition;
 }
 
